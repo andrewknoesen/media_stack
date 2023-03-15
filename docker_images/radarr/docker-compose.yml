@@ -12,4 +12,4 @@ services:
       - UMASK=002
       - TZ=Etc/UTC
     volumes:
-      - /<host_folder_config>:/config
+      - ./config # path to the folder on your host machine where you want to store the Radarr configuration files

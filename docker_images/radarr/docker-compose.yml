@@ -12,4 +12,4 @@ services:
       - UMASK=002
       - TZ=Etc/UTC
     volumes:
-      - ./config # path to the folder on your host machine where you want to store the Radarr configuration files
+      - /Users/andrew/Documents/Projects/Personal/MEDIA_STACK/media_stack/docker_images/radarr/config # path to the folder on your host machine where you want to store the Radarr configuration files

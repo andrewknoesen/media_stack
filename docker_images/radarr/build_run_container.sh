@@ -6,4 +6,4 @@ mkdir /Users/andrew/arr/media/movies
 mkdir /Users/andrew/arr/media/downloads
 chmod -R 777 /Users/andrew/arr/
 
-docker compose up
+docker compose up -d

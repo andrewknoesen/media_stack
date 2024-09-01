@@ -1,5 +1,5 @@
 # media_stack
-Sonarr, radarr kodi stack
+Sonarr, radarr jellyfin stack
 
 
 Using hotio containers

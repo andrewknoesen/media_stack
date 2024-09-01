@@ -1,0 +1,230 @@
+services:
+# ########################################################################## #
+#                                  JELLYSEER                                 #
+# ########################################################################## #
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    environment:
+      - LOG_LEVEL=debug
+      - TZ=Etc/UTC
+      - PORT=5055 #optional
+    ports:
+      - 5055:5055
+    volumes:
+      - ./jellyseerr/data:/app/config
+    restart: unless-stopped
+# ########################################################################## #
+#                                   CALIBRE                                  #
+# ########################################################################## #
+  calibre:
+    image: lscr.io/linuxserver/calibre:latest
+    container_name: calibre
+    security_opt:
+      - seccomp:unconfined #optional
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+     # - PASSWORD= #optional
+     # - CLI_ARGS= #optional
+    volumes:
+      - ./calibre/data:/config
+      - /media/data/media/books:/books #optional
+      - /media/data/media/calibre/tmp:/books_staging #optional
+    ports:
+      - 9090:8080
+      - 9191:8181
+      - 9091:8081
+    restart: unless-stopped
+# ########################################################################## #
+#                                  JELLYFIN                                  #
+# ########################################################################## #
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+ #     - JELLYFIN_PublishedServerUrl=192.168.0.5 #optional
+    volumes:
+      - ./jellyfin/data:/config
+      - /media/data/media/anime:/anime
+      - /media/data/media/tvseries:/tv
+      - /media/data/media/movies:/movies
+    ports:
+      - 8096:8096
+#      - 8920:8920 #optional
+#      - 7359:7359/udp #optional
+ #     - 1900:1900/udp #optional
+    restart: unless-stopped
+# ########################################################################## #
+#                                   SABNZB                                   #
+# ########################################################################## #
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./sabnzbd/config:/config
+      - /media/data/media/downloads:/downloads #optional
+      - /media/data/media/incomplete-downloads:/incomplete-downloads #optional
+    ports:
+      - 8081:8080
+    restart: unless-stopped
+# ########################################################################## #
+#                                 QBITTORRENT                                #
+# ########################################################################## #
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - WEBUI_PORT=8080
+      - TORRENTING_PORT=6881
+    volumes:
+      - ./qbittorrent:/config # path to the folder on your host machine where you want to store the Radarr configuration files
+      - /media/data/media/downloads:/downloads # path for downloads
+    ports:
+      - 8080:8080
+      - 6881:6881
+      - 6881:6881/udp
+    restart: unless-stopped
+# ########################################################################## #
+#                                   HOMARR                                   #
+# ########################################################################## #
+  homarr:
+    container_name: homarr
+    image: ghcr.io/ajnart/homarr:latest
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration
+      - ./homarr/configs:/app/data/configs
+      - ./homarr/icons:/app/public/icons
+      - ./homarr/data:/data
+    ports:
+      - '7575:7575'
+# ########################################################################## #
+#                                   BAZARR                                   #
+# ########################################################################## #
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - /path/to/bazarr/config:/config
+      - /media/data/media/tvseries:/tv #optional
+      - /media/data/media/anime:/anime #optional
+      - /media/data/media/movies:/movies #optional
+    ports:
+      - 6767:6767
+    restart: unless-stopped
+# ########################################################################## #
+#                                   SONAAR                                   #
+# ########################################################################## #
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./sonarr/data:/config
+      - /media/data/media/tvseries:/tv #optional
+      - /media/data/media/anime/series:/anime/series #optional
+      - /media/data/media/downloads:/downloads #optional
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+# ########################################################################## #
+#                                   RADARR                                   #
+# ########################################################################## #
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./radarr/data:/config
+      - /media/data/media/movies:/movies #optional
+      - /media/data/media/anime/movies:/anime/movies #optional
+      - /media/data/media/downloads:/downloads #optional
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+# ########################################################################## #
+#                                   READARR                                  #
+# ########################################################################## #
+  readarr:
+    image: lscr.io/linuxserver/readarr:develop
+    container_name: readarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./readarr/data:/config
+      - /media/data/media/books:/books #optional
+      - /media/data/media/downloads:/downloads #optional
+    ports:
+      - 8787:8787
+    restart: unless-stopped
+# ########################################################################## #
+#                                  PROWLARR                                  #
+# ########################################################################## #
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./prowlarr/data:/config
+      - /media/data/media/downloads:/downloads # optional
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+# ########################################################################## #
+#                                    TDARR                                   #
+# ########################################################################## #
+  tdarr:
+    container_name: tdarr
+    image: ghcr.io/haveagitgat/tdarr:latest
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+      - 8265:8265 # webUI port
+      - 8266:8266 # server port
+    environment:
+      - auth=True
+      - TZ=Etc/UTC
+      - serverPort=8266
+      - webUIPort=8265
+      - internalNode=true
+      - inContainer=true
+      - nodeName=MyInternalNode
+    volumes:
+      - ./tdarr/server:/app/server
+      - ./tdarr/configs:/app/configs
+      - ./tdarr/logs:/app/logs
+      - /media/data/media/tdarr/transcode_cache:/temp
+      - /media/data/media/movies:/media/movies
+      - /media/data/media/tvseries:/media/tvseries
+      - /media/data/media/anime:/media/anime
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0' # Limit the container to use 2 CPU cores

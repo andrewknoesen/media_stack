@@ -59,6 +59,28 @@ services:
 #      - 7359:7359/udp #optional
  #     - 1900:1900/udp #optional
     restart: unless-stopped
+
+# ########################################################################## #
+#                                    PLEX                                    #
+# ########################################################################## #
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - VERSION=docker
+  #    - PLEX_CLAIM= #optional
+    volumes:
+      - ./plex/data:/config
+      - /media/data/media/anime:/anime
+      - /media/data/media/tvseries:/tv
+      - /media/data/media/movies:/movies
+    restart: unless-stopped
+
+
 # ########################################################################## #
 #                                   SABNZB                                   #
 # ########################################################################## #

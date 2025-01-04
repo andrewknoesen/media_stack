@@ -1,4 +1,21 @@
 services:
+
+# ########################################################################## #
+#                                 JDOWNLOADER                                #
+# ########################################################################## #
+
+  jdownloader-2:
+    image: jlesage/jdownloader-2
+    container_name: jdownloader
+    environment:
+      - PUID=3000
+      - PGID=3000
+    ports:
+      - "5800:5800"
+    volumes:
+      - "./jdownloader:/config:rw"
+      - "smb_downloads:/output:rw"
+
 # ########################################################################## #
 #                                  JELLYSEER                                 #
 # ########################################################################## #
@@ -23,15 +40,15 @@ services:
     security_opt:
       - seccomp:unconfined #optional
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=3000
+      - PGID=3000
       - TZ=Etc/UTC
      # - PASSWORD= #optional
      # - CLI_ARGS= #optional
     volumes:
       - ./calibre/data:/config
-      - /media/data/media/books:/books #optional
-      - /media/data/media/calibre/tmp:/books_staging #optional
+      - smb_books:/books #optional
+      # - smb_calibre:/books_staging #optional
     ports:
       - 9090:8080
       - 9191:8181
@@ -40,25 +57,25 @@ services:
 # ########################################################################## #
 #                                  JELLYFIN                                  #
 # ########################################################################## #
-  jellyfin:
-    image: lscr.io/linuxserver/jellyfin:latest
-    container_name: jellyfin
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Etc/UTC
- #     - JELLYFIN_PublishedServerUrl=192.168.0.5 #optional
-    volumes:
-      - ./jellyfin/data:/config
-      - /media/data/media/anime:/anime
-      - /media/data/media/tvseries:/tv
-      - /media/data/media/movies:/movies
-    ports:
-      - 8096:8096
-#      - 8920:8920 #optional
-#      - 7359:7359/udp #optional
- #     - 1900:1900/udp #optional
-    restart: unless-stopped
+#   jellyfin:
+#     image: lscr.io/linuxserver/jellyfin:latest
+#     container_name: jellyfin
+#     environment:
+#       - PUID=3000
+#       - PGID=3000
+#       - TZ=Etc/UTC
+#  #     - JELLYFIN_PublishedServerUrl=192.168.0.5 #optional
+#     volumes:
+#       - ./jellyfin/data:/config
+#       - smb_anime:/anime
+#       - smb_tvseries:/tv
+#       - smb_movies:/movies
+#     ports:
+#       - 8096:8096
+# #      - 8920:8920 #optional
+# #      - 7359:7359/udp #optional
+#  #     - 1900:1900/udp #optional
+#     restart: unless-stopped
 
 # ########################################################################## #
 #                                    PLEX                                    #
@@ -68,16 +85,16 @@ services:
     container_name: plex
     network_mode: host
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=3000
+      - PGID=3000
       - TZ=Etc/UTC
       - VERSION=docker
   #    - PLEX_CLAIM= #optional
     volumes:
       - ./plex/data:/config
-      - /media/data/media/anime:/anime
-      - /media/data/media/tvseries:/tv
-      - /media/data/media/movies:/movies
+      - smb_anime:/anime
+      - smb_tvseries:/tv
+      - smb_movies:/movies
     restart: unless-stopped
 
 
@@ -88,13 +105,13 @@ services:
     image: lscr.io/linuxserver/sabnzbd:latest
     container_name: sabnzbd
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=3000
+      - PGID=3000
       - TZ=Etc/UTC
     volumes:
       - ./sabnzbd/config:/config
-      - /media/data/media/downloads:/downloads #optional
-      - /media/data/media/incomplete-downloads:/incomplete-downloads #optional
+      - smb_downloads:/downloads #optional
+      - smb_incomplete_downloads:/incomplete-downloads #optional
     ports:
       - 8081:8080
     restart: unless-stopped
@@ -105,14 +122,14 @@ services:
     image: lscr.io/linuxserver/qbittorrent:latest
     container_name: qbittorrent
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=3000
+      - PGID=3000
       - TZ=Etc/UTC
       - WEBUI_PORT=8080
       - TORRENTING_PORT=6881
     volumes:
       - ./qbittorrent:/config # path to the folder on your host machine where you want to store the Radarr configuration files
-      - /media/data/media/downloads:/downloads # path for downloads
+      - smb_downloads:/downloads # path for downloads
     ports:
       - 8080:8080
       - 6881:6881
@@ -139,14 +156,14 @@ services:
     image: lscr.io/linuxserver/bazarr:latest
     container_name: bazarr
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=3000
+      - PGID=3000
       - TZ=Etc/UTC
     volumes:
       - /path/to/bazarr/config:/config
-      - /media/data/media/tvseries:/tv #optional
-      - /media/data/media/anime:/anime #optional
-      - /media/data/media/movies:/movies #optional
+      - smb_tvseries:/tv #optional
+      - smb_anime:/anime #optional
+      - smb_movies:/movies #optional
     ports:
       - 6767:6767
     restart: unless-stopped
@@ -157,14 +174,14 @@ services:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=3000
+      - PGID=3000
       - TZ=Etc/UTC
     volumes:
       - ./sonarr/data:/config
-      - /media/data/media/tvseries:/tv #optional
-      - /media/data/media/anime/series:/anime/series #optional
-      - /media/data/media/downloads:/downloads #optional
+      - smb_tvseries:/tv #optional
+      - smb_anime_series:/anime/series #optional
+      - smb_downloads:/downloads #optional
     ports:
       - 8989:8989
     restart: unless-stopped
@@ -175,14 +192,14 @@ services:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=3000
+      - PGID=3000
       - TZ=Etc/UTC
     volumes:
       - ./radarr/data:/config
-      - /media/data/media/movies:/movies #optional
-      - /media/data/media/anime/movies:/anime/movies #optional
-      - /media/data/media/downloads:/downloads #optional
+      - smb_movies:/movies #optional
+      - smb_anime_movies:/anime/movies #optional
+      - smb_downloads:/downloads #optional
     ports:
       - 7878:7878
     restart: unless-stopped
@@ -193,13 +210,13 @@ services:
     image: lscr.io/linuxserver/readarr:develop
     container_name: readarr
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=3000
+      - PGID=3000
       - TZ=Etc/UTC
     volumes:
       - ./readarr/data:/config
-      - /media/data/media/books:/books #optional
-      - /media/data/media/downloads:/downloads #optional
+      - smb_books:/books #optional
+      - smb_downloads:/downloads #optional
     ports:
       - 8787:8787
     restart: unless-stopped
@@ -210,12 +227,12 @@ services:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=3000
+      - PGID=3000
       - TZ=Etc/UTC
     volumes:
       - ./prowlarr/data:/config
-      - /media/data/media/downloads:/downloads # optional
+      - smb_downloads:/downloads # optional
     ports:
       - 9696:9696
     restart: unless-stopped
@@ -242,11 +259,79 @@ services:
       - ./tdarr/server:/app/server
       - ./tdarr/configs:/app/configs
       - ./tdarr/logs:/app/logs
-      - /media/data/media/tdarr/transcode_cache:/temp
-      - /media/data/media/movies:/media/movies
-      - /media/data/media/tvseries:/media/tvseries
-      - /media/data/media/anime:/media/anime
+      - smb_tdarr_cache:/temp
+      - smb_movies:/media/movies
+      - smb_tvseries:/media/tvseries
+      - smb_anime:/media/anime
     deploy:
       resources:
         limits:
-          cpus: '2.0' # Limit the container to use 2 CPU cores
+          cpus: '1.5' # Limit the container to use 2 CPU cores
+
+volumes:
+  smb_share:
+    driver: local
+    driver_opts:
+      type: cifs
+      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
+      device: "//192.168.0.115/share"  
+  smb_books:
+    driver: local
+    driver_opts:
+      type: cifs
+      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
+      device: "//192.168.0.115/share/books"  
+  smb_downloads:
+    driver: local
+    driver_opts:
+      type: cifs
+      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
+      device: "//192.168.0.115/share/downloads" 
+  smb_incomplete_downloads:
+    driver: local
+    driver_opts:
+      type: cifs
+      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
+      device: "//192.168.0.115/share/incomplete-downloads"
+  smb_tdarr_cache:
+    driver: local
+    driver_opts:
+      type: cifs
+      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
+      device: "//192.168.0.115/share/tdarr/transcode_cache"
+  smb_movies:
+    driver: local
+    driver_opts:
+      type: cifs
+      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
+      device: "//192.168.0.115/share/movies"
+  smb_tvseries:
+    driver: local
+    driver_opts:
+      type: cifs
+      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
+      device: "//192.168.0.115/share/tvseries"
+  smb_anime:
+    driver: local
+    driver_opts:
+      type: cifs
+      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
+      device: "//192.168.0.115/share/anime"
+  smb_anime_movies:
+    driver: local
+    driver_opts:
+      type: cifs
+      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
+      device: "//192.168.0.115/share/anime/movies"
+  smb_anime_series:
+    driver: local
+    driver_opts:
+      type: cifs
+      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
+      device: "//192.168.0.115/share/anime/series"
+  smb_calibre:
+    driver: local
+    driver_opts:
+      type: cifs
+      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
+      device: "//192.168.0.115/share/calibre/tmp"

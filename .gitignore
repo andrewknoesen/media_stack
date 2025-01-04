@@ -4,3 +4,5 @@ tdarr/*
 sabnzbd/config/
 homarr/
 /downloads
+jdownloader/
+.env

@@ -15,22 +15,41 @@ services:
     volumes:
       - "./jdownloader:/config:rw"
       - "smb_downloads:/output:rw"
+    restart: unless-stopped
+  
+
+# ########################################################################## #
+#                                  OVERSEER                                  #
+# ########################################################################## #
+
+  overseerr:
+    image: lscr.io/linuxserver/overseerr:latest
+    container_name: overseerr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ~/Documents/Projects/Media_Stack/media_stack/overseer/configs:/config
+    ports:
+      - 5055:5055
+    restart: unless-stopped
 
 # ########################################################################## #
 #                                  JELLYSEER                                 #
 # ########################################################################## #
-  jellyseerr:
-    image: fallenbagel/jellyseerr:latest
-    container_name: jellyseerr
-    environment:
-      - LOG_LEVEL=debug
-      - TZ=Etc/UTC
-      - PORT=5055 #optional
-    ports:
-      - 5055:5055
-    volumes:
-      - ./jellyseerr/data:/app/config
-    restart: unless-stopped
+#  jellyseerr:
+#    image: fallenbagel/jellyseerr:latest
+#    container_name: jellyseerr
+#    environment:
+#      - LOG_LEVEL=debug
+#      - TZ=Etc/UTC
+#      - PORT=5055 #optional
+#    ports:
+#      - 5055:5055
+#    volumes:
+#      - ./jellyseerr/data:/app/config
+#    restart: unless-stopped
 # ########################################################################## #
 #                                   CALIBRE                                  #
 # ########################################################################## #
@@ -80,41 +99,41 @@ services:
 # ########################################################################## #
 #                                    PLEX                                    #
 # ########################################################################## #
-  plex:
-    image: lscr.io/linuxserver/plex:latest
-    container_name: plex
-    network_mode: host
-    environment:
-      - PUID=3000
-      - PGID=3000
-      - TZ=Etc/UTC
-      - VERSION=docker
-  #    - PLEX_CLAIM= #optional
-    volumes:
-      - ./plex/data:/config
-      - smb_anime:/anime
-      - smb_tvseries:/tv
-      - smb_movies:/movies
-    restart: unless-stopped
+  # plex:
+  #   image: lscr.io/linuxserver/plex:latest
+  #   container_name: plex
+  #   network_mode: host
+  #   environment:
+  #     - PUID=3000
+  #     - PGID=3000
+  #     - TZ=Etc/UTC
+  #     - VERSION=docker
+  # #    - PLEX_CLAIM= #optional
+  #   volumes:
+  #     - ./plex/data:/config
+  #     - smb_anime:/anime
+  #     - smb_tvseries:/tv
+  #     - smb_movies:/movies
+  #   restart: unless-stopped
 
 
 # ########################################################################## #
 #                                   SABNZB                                   #
 # ########################################################################## #
-  sabnzbd:
-    image: lscr.io/linuxserver/sabnzbd:latest
-    container_name: sabnzbd
-    environment:
-      - PUID=3000
-      - PGID=3000
-      - TZ=Etc/UTC
-    volumes:
-      - ./sabnzbd/config:/config
-      - smb_downloads:/downloads #optional
-      - smb_incomplete_downloads:/incomplete-downloads #optional
-    ports:
-      - 8081:8080
-    restart: unless-stopped
+#  sabnzbd:
+#    image: lscr.io/linuxserver/sabnzbd:latest
+#    container_name: sabnzbd
+#    environment:
+#      - PUID=3000
+#      - PGID=3000
+#      - TZ=Etc/UTC
+#    volumes:
+#      - ./sabnzbd/config:/config
+#      - smb_downloads:/downloads #optional
+#      - smb_incomplete_downloads:/incomplete-downloads #optional
+#    ports:
+#      - 8081:8080
+#    restart: unless-stopped
 # ########################################################################## #
 #                                 QBITTORRENT                                #
 # ########################################################################## #
@@ -239,99 +258,110 @@ services:
 # ########################################################################## #
 #                                    TDARR                                   #
 # ########################################################################## #
-  tdarr:
-    container_name: tdarr
-    image: ghcr.io/haveagitgat/tdarr:latest
-    restart: unless-stopped
-    network_mode: bridge
-    ports:
-      - 8265:8265 # webUI port
-      - 8266:8266 # server port
-    environment:
-      - auth=True
-      - TZ=Etc/UTC
-      - serverPort=8266
-      - webUIPort=8265
-      - internalNode=true
-      - inContainer=true
-      - nodeName=MyInternalNode
-    volumes:
-      - ./tdarr/server:/app/server
-      - ./tdarr/configs:/app/configs
-      - ./tdarr/logs:/app/logs
-      - smb_tdarr_cache:/temp
-      - smb_movies:/media/movies
-      - smb_tvseries:/media/tvseries
-      - smb_anime:/media/anime
-    deploy:
-      resources:
-        limits:
-          cpus: '1.5' # Limit the container to use 2 CPU cores
+  # tdarr:
+  #   container_name: tdarr
+  #   # image: ghcr.io/haveagitgat/tdarr:latest
+  #   image: ghcr.io/haveagitgat/tdarr_node:latest
+  #   restart: unless-stopped
+  #   network_mode: bridge
+  #   # ports:
+  #   #   - 8265:8265 # webUI port
+  #   #   - 8266:8266 # server port
+  #   environment:
+  #     - PUID=3000
+  #     - PGID=3000
+  #     - auth=True
+  #     - TZ=Etc/UTC
+  #     # - webUIPort=8265
+  #     # - serverIP=0.0.0.0
+  #     - serverPort=8266
+  #     - serverIP=192.168.0.115
+  #     # - internalNode=true
+  #     - inContainer=true
+  #     - nodeName=ExternalNode2
+  #   volumes:
+  #     - ./tdarr/server:/app/server
+  #     - ./tdarr/logs:/app/logs
+  #     - smb_tdarr_configs:/app/configs
+  #     - smb_tdarr_cache:/temp
+  #     - smb_movies:/media/movies
+  #     - smb_tvseries:/media/tvseries
+  #     - smb_anime:/media/anime
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '2' # Limit the container to use 2 CPU cores
 
 volumes:
   smb_share:
     driver: local
     driver_opts:
-      type: cifs
-      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
-      device: "//192.168.0.115/share"  
+      type: nfs
+      o: addr=192.168.0.115,rw,nolock,hard,nfsvers=4
+      device: ":/share"  
   smb_books:
     driver: local
     driver_opts:
-      type: cifs
-      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
-      device: "//192.168.0.115/share/books"  
+      type: nfs
+      o: addr=192.168.0.115,rw,nolock,hard,nfsvers=4
+      device: ":/share/books"  
   smb_downloads:
     driver: local
     driver_opts:
-      type: cifs
-      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
-      device: "//192.168.0.115/share/downloads" 
+      type: nfs
+      o: addr=192.168.0.115,rw,nolock,hard,nfsvers=4
+      device: ":/share/downloads" 
   smb_incomplete_downloads:
     driver: local
     driver_opts:
-      type: cifs
-      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
-      device: "//192.168.0.115/share/incomplete-downloads"
+      type: nfs
+      o: addr=192.168.0.115,rw,nolock,hard,nfsvers=4
+      device: ":/share/incomplete-downloads"
   smb_tdarr_cache:
     driver: local
     driver_opts:
-      type: cifs
-      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
-      device: "//192.168.0.115/share/tdarr/transcode_cache"
+      type: nfs
+      o: addr=192.168.0.115,rw,nolock,hard,nfsvers=4
+      device: ":/share/tdarr/transcode_cache"
+  smb_tdarr_configs:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=192.168.0.115,rw,nolock,hard,nfsvers=4
+      device: ":/share/tdarr/configs"
   smb_movies:
     driver: local
     driver_opts:
-      type: cifs
-      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
-      device: "//192.168.0.115/share/movies"
+      type: nfs
+      o: addr=192.168.0.115,rw,nolock,hard,nfsvers=4
+      device: ":/share/movies"
   smb_tvseries:
     driver: local
     driver_opts:
-      type: cifs
-      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
-      device: "//192.168.0.115/share/tvseries"
+      type: nfs
+      o: addr=192.168.0.115,rw,nolock,hard,nfsvers=4
+      device: ":/share/tvseries"
   smb_anime:
     driver: local
     driver_opts:
-      type: cifs
-      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
-      device: "//192.168.0.115/share/anime"
+      type: nfs
+      o: addr=192.168.0.115,rw,nolock,hard,nfsvers=4
+      device: ":/share/anime"
   smb_anime_movies:
     driver: local
     driver_opts:
-      type: cifs
-      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
-      device: "//192.168.0.115/share/anime/movies"
+      type: nfs
+      o: addr=192.168.0.115,rw,nolock,hard,nfsvers=4
+      device: ":/share/anime/movies"
   smb_anime_series:
     driver: local
     driver_opts:
-      type: cifs
-      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
-      device: "//192.168.0.115/share/anime/series"
+      type: nfs
+      o: addr=192.168.0.115,rw,nolock,hard,nfsvers=4
+      device: ":/share/anime/series"
   smb_calibre:
     driver: local
     driver_opts:
-      type: cifs
-      o: "username=${SMB_USER},password=${SMB_PASS},vers=3.0,rw,uid=3000,gid=3000,nobrl"
-      device: "//192.168.0.115/share/calibre/tmp"
+      type: nfs
+      o: addr=192.168.0.115,rw,nolock,hard,nfsvers=4
+      device: ":/share/calibre/tmp"

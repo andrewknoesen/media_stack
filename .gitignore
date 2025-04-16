@@ -1,9 +1,10 @@
 **/data/
-qbittorrent/*
-tdarr/*
-sabnzbd/config/
+qbittorrent/
+tdarr/
+sabnzbd/
 homarr/
 /downloads
 jdownloader/
 .env
 tautulli/
+deleterr/

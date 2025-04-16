@@ -1,0 +1,38 @@
+{
+    "dry_run": false,
+    "log_level": "INFO",
+    "schedule_interval": "1d",
+    "plex": {
+        "base_url": "http://192.168.0.115:32400",
+        "token": "XV-cZCWYFKp-13-9ENT6"
+    },
+    "radarr": {
+        "enabled": true,
+        "api_key": "ff874ebb026341e595188a71ad1d8ca1",
+        "base_url": "http://192.168.0.200:7878/api/v3",
+        "exempt_tag_names": [],
+        "watched_deletion_threshold": "30d",
+        "unwatched_deletion_threshold": "300000d"
+    },
+    "sonarr": {
+        "enabled": true,
+        "api_key": "24c0471b51854bee84a2b64e5f6be56f",
+        "base_url": "http://192.168.0.200:8989/api/v3",
+        "monitor_continuing_series": true,
+        "dynamic_load": {
+            "enabled": true,
+            "episodes_to_load": 3,
+            "episodes_to_keep": 3,
+            "watched_deletion_threshold": "30d",
+            "schedule_interval": "5m"
+        },
+        "watched_deletion_threshold": "30000000d",
+        "unwatched_deletion_threshold": "300000d"
+    },
+    "overseerr": {
+        "enabled": true,
+        "api_key": "MTczNzI5NjczMDIxMmIzODFkZDNiLWQ0MGYtNDBjMi04NDM1LTJjYTJlZjA2YmZlOA==",
+        "base_url": "http://192.168.0.200:5055/api/v1",
+        "fetch_limit": 20
+    }
+}

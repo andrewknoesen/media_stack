@@ -1,8 +1,8 @@
 services:
 
-# ########################################################################## #
-#                                 JDOWNLOADER                                #
-# ########################################################################## #
+  # ########################################################################## #
+  #                                 JDOWNLOADER                                #
+  # ########################################################################## #
 
   jdownloader-2:
     image: jlesage/jdownloader-2
@@ -16,11 +16,10 @@ services:
       - "./jdownloader:/config:rw"
       - "smb_downloads:/output:rw"
     restart: unless-stopped
-  
 
-# ########################################################################## #
-#                                  OVERSEER                                  #
-# ########################################################################## #
+  # ########################################################################## #
+  #                                  OVERSEER                                  #
+  # ########################################################################## #
 
   overseerr:
     image: lscr.io/linuxserver/overseerr:latest
@@ -35,24 +34,24 @@ services:
       - 5055:5055
     restart: unless-stopped
 
-# ########################################################################## #
-#                                  JELLYSEER                                 #
-# ########################################################################## #
-#  jellyseerr:
-#    image: fallenbagel/jellyseerr:latest
-#    container_name: jellyseerr
-#    environment:
-#      - LOG_LEVEL=debug
-#      - TZ=Etc/UTC
-#      - PORT=5055 #optional
-#    ports:
-#      - 5055:5055
-#    volumes:
-#      - ./jellyseerr/data:/app/config
-#    restart: unless-stopped
-# ########################################################################## #
-#                                   CALIBRE                                  #
-# ########################################################################## #
+  # ########################################################################## #
+  #                                  JELLYSEER                                 #
+  # ########################################################################## #
+  #  jellyseerr:
+  #    image: fallenbagel/jellyseerr:latest
+  #    container_name: jellyseerr
+  #    environment:
+  #      - LOG_LEVEL=debug
+  #      - TZ=Etc/UTC
+  #      - PORT=5055 #optional
+  #    ports:
+  #      - 5055:5055
+  #    volumes:
+  #      - ./jellyseerr/data:/app/config
+  #    restart: unless-stopped
+  # ########################################################################## #
+  #                                   CALIBRE                                  #
+  # ########################################################################## #
   calibre:
     image: lscr.io/linuxserver/calibre:latest
     container_name: calibre
@@ -62,8 +61,8 @@ services:
       - PUID=3000
       - PGID=3000
       - TZ=Etc/UTC
-     # - PASSWORD= #optional
-     # - CLI_ARGS= #optional
+    # - PASSWORD= #optional
+    # - CLI_ARGS= #optional
     volumes:
       - ./calibre/data:/config
       - smb_books:/books #optional
@@ -73,32 +72,32 @@ services:
       - 9191:8181
       - 9091:8081
     restart: unless-stopped
-# ########################################################################## #
-#                                  JELLYFIN                                  #
-# ########################################################################## #
-#   jellyfin:
-#     image: lscr.io/linuxserver/jellyfin:latest
-#     container_name: jellyfin
-#     environment:
-#       - PUID=3000
-#       - PGID=3000
-#       - TZ=Etc/UTC
-#  #     - JELLYFIN_PublishedServerUrl=192.168.0.5 #optional
-#     volumes:
-#       - ./jellyfin/data:/config
-#       - smb_anime:/anime
-#       - smb_tvseries:/tv
-#       - smb_movies:/movies
-#     ports:
-#       - 8096:8096
-# #      - 8920:8920 #optional
-# #      - 7359:7359/udp #optional
-#  #     - 1900:1900/udp #optional
-#     restart: unless-stopped
+  # ########################################################################## #
+  #                                  JELLYFIN                                  #
+  # ########################################################################## #
+  #   jellyfin:
+  #     image: lscr.io/linuxserver/jellyfin:latest
+  #     container_name: jellyfin
+  #     environment:
+  #       - PUID=3000
+  #       - PGID=3000
+  #       - TZ=Etc/UTC
+  #  #     - JELLYFIN_PublishedServerUrl=192.168.0.5 #optional
+  #     volumes:
+  #       - ./jellyfin/data:/config
+  #       - smb_anime:/anime
+  #       - smb_tvseries:/tv
+  #       - smb_movies:/movies
+  #     ports:
+  #       - 8096:8096
+  # #      - 8920:8920 #optional
+  # #      - 7359:7359/udp #optional
+  #  #     - 1900:1900/udp #optional
+  #     restart: unless-stopped
 
-# ########################################################################## #
-#                                    PLEX                                    #
-# ########################################################################## #
+  # ########################################################################## #
+  #                                    PLEX                                    #
+  # ########################################################################## #
   # plex:
   #   image: lscr.io/linuxserver/plex:latest
   #   container_name: plex
@@ -117,26 +116,26 @@ services:
   #   restart: unless-stopped
 
 
-# ########################################################################## #
-#                                   SABNZB                                   #
-# ########################################################################## #
-#  sabnzbd:
-#    image: lscr.io/linuxserver/sabnzbd:latest
-#    container_name: sabnzbd
-#    environment:
-#      - PUID=3000
-#      - PGID=3000
-#      - TZ=Etc/UTC
-#    volumes:
-#      - ./sabnzbd/config:/config
-#      - smb_downloads:/downloads #optional
-#      - smb_incomplete_downloads:/incomplete-downloads #optional
-#    ports:
-#      - 8081:8080
-#    restart: unless-stopped
-# ########################################################################## #
-#                                 QBITTORRENT                                #
-# ########################################################################## #
+  # ########################################################################## #
+  #                                   SABNZB                                   #
+  # ########################################################################## #
+  #  sabnzbd:
+  #    image: lscr.io/linuxserver/sabnzbd:latest
+  #    container_name: sabnzbd
+  #    environment:
+  #      - PUID=3000
+  #      - PGID=3000
+  #      - TZ=Etc/UTC
+  #    volumes:
+  #      - ./sabnzbd/config:/config
+  #      - smb_downloads:/downloads #optional
+  #      - smb_incomplete_downloads:/incomplete-downloads #optional
+  #    ports:
+  #      - 8081:8080
+  #    restart: unless-stopped
+  # ########################################################################## #
+  #                                 QBITTORRENT                                #
+  # ########################################################################## #
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
     container_name: qbittorrent
@@ -154,9 +153,9 @@ services:
       - 6881:6881
       - 6881:6881/udp
     restart: unless-stopped
-# ########################################################################## #
-#                                   HOMARR                                   #
-# ########################################################################## #
+  # ########################################################################## #
+  #                                   HOMARR                                   #
+  # ########################################################################## #
   homarr:
     container_name: homarr
     image: ghcr.io/ajnart/homarr:latest
@@ -168,9 +167,9 @@ services:
       - ./homarr/data:/data
     ports:
       - '7575:7575'
-# ########################################################################## #
-#                                   BAZARR                                   #
-# ########################################################################## #
+  # ########################################################################## #
+  #                                   BAZARR                                   #
+  # ########################################################################## #
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
     container_name: bazarr
@@ -186,9 +185,9 @@ services:
     ports:
       - 6767:6767
     restart: unless-stopped
-# ########################################################################## #
-#                                   SONAAR                                   #
-# ########################################################################## #
+  # ########################################################################## #
+  #                                   SONAAR                                   #
+  # ########################################################################## #
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
@@ -204,9 +203,9 @@ services:
     ports:
       - 8989:8989
     restart: unless-stopped
-# ########################################################################## #
-#                                   RADARR                                   #
-# ########################################################################## #
+  # ########################################################################## #
+  #                                   RADARR                                   #
+  # ########################################################################## #
   radarr:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
@@ -222,9 +221,9 @@ services:
     ports:
       - 7878:7878
     restart: unless-stopped
-# ########################################################################## #
-#                                   READARR                                  #
-# ########################################################################## #
+  # ########################################################################## #
+  #                                   READARR                                  #
+  # ########################################################################## #
   readarr:
     image: lscr.io/linuxserver/readarr:develop
     container_name: readarr
@@ -239,9 +238,9 @@ services:
     ports:
       - 8787:8787
     restart: unless-stopped
-# ########################################################################## #
-#                                  PROWLARR                                  #
-# ########################################################################## #
+  # ########################################################################## #
+  #                                  PROWLARR                                  #
+  # ########################################################################## #
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
@@ -255,9 +254,9 @@ services:
     ports:
       - 9696:9696
     restart: unless-stopped
-# ########################################################################## #
-#                                    TDARR                                   #
-# ########################################################################## #
+  # ########################################################################## #
+  #                                    TDARR                                   #
+  # ########################################################################## #
   # tdarr:
   #   container_name: tdarr
   #   # image: ghcr.io/haveagitgat/tdarr:latest
@@ -292,9 +291,9 @@ services:
   #       limits:
   #         cpus: '2' # Limit the container to use 2 CPU cores
 
-# ########################################################################## #
-#                                 DECLUTTARR                                 #
-# ########################################################################## #
+  # ########################################################################## #
+  #                                 DECLUTTARR                                 #
+  # ########################################################################## #
 
   decluttarr:
     image: ghcr.io/manimatter/decluttarr:latest
@@ -322,26 +321,18 @@ services:
       REMOVE_SLOW: True
       REMOVE_STALLED: True
       REMOVE_UNMONITORED: True
-      RUN_PERIODIC_RESCANS: '
-        {
-        "SONARR": {"MISSING": true, "CUTOFF_UNMET": true, "MAX_CONCURRENT_SCANS": 3, "MIN_DAYS_BEFORE_RESCAN": 7},
-        "RADARR": {"MISSING": true, "CUTOFF_UNMET": true, "MAX_CONCURRENT_SCANS": 3, "MIN_DAYS_BEFORE_RESCAN": 7}
-        }'
+      RUN_PERIODIC_RESCANS: ' { "SONARR": {"MISSING": true, "CUTOFF_UNMET": true, "MAX_CONCURRENT_SCANS": 3, "MIN_DAYS_BEFORE_RESCAN": 7}, "RADARR": {"MISSING": true, "CUTOFF_UNMET": true, "MAX_CONCURRENT_SCANS": 3, "MIN_DAYS_BEFORE_RESCAN": 7} }'
 
       # Feature Settings
       PERMITTED_ATTEMPTS: 3
       NO_STALLED_REMOVAL_QBIT_TAG: Don't Kill
       MIN_DOWNLOAD_SPEED: 100
-      FAILED_IMPORT_MESSAGE_PATTERNS: '
-        [
-        "Not a Custom Format upgrade for existing",
-        "Not an upgrade for existing"
-        ]'
+      FAILED_IMPORT_MESSAGE_PATTERNS: ' [ "Not a Custom Format upgrade for existing", "Not an upgrade for existing" ]'
       IGNORED_DOWNLOAD_CLIENTS: null
 
-# ########################################################################## #
-#                                  TAUTULLI                                  #
-# ########################################################################## #
+  # ########################################################################## #
+  #                                  TAUTULLI                                  #
+  # ########################################################################## #
   tautulli:
     image: lscr.io/linuxserver/tautulli:latest
     container_name: tautulli
@@ -354,6 +345,63 @@ services:
     ports:
       - 8181:8181
     restart: unless-stopped
+
+  # ########################################################################## #
+  #                                  DELETERR                                  #
+  # ########################################################################## #
+
+  # deleterr:
+  #     image: ghcr.io/rfsbraz/deleterr:latest
+  #     container_name: deleterr
+  #     environment:
+  #         LOG_LEVEL: INFO
+  #     volumes:
+  #         - ./deleterr/config:/config
+  #         - ./deleterr/logs:/config/logs
+  #     restart: no
+  # scheduler:
+  #     image: mcuadros/ofelia:latest
+  #     container_name: scheduler
+  #     depends_on:
+  #         - deleterr
+  #     command: daemon --docker
+  #     volumes:
+  #         - /var/run/docker.sock:/var/run/docker.sock:ro
+  #     restart: unless-stopped
+  #     labels:
+  #         ofelia.job-run.deleterr.schedule: "@weekly"
+  #         ofelia.job-run.deleterr.container: "deleterr"
+
+    
+#  eraserr:
+#    image: ecsouthwick/eraserr
+#    container_name: eraserr
+#    volumes:
+#      - ./eraserr/config.json:/app/config.json
+#    restart: no
+  # ########################################################################## #
+  #                                 MAINTANERR                                 #
+  # ########################################################################## #
+
+  # maintainerr:
+  #   image: ghcr.io/jorenn92/maintainerr:latest # or jorenn92/maintainerr:latest
+  #   container_name: maintainerr
+  #   user: 1000:1000
+  #   volumes:
+  #     - type: bind
+  #       source: ./maintainerr/data
+  #       target: /opt/data
+  #   environment:
+  #     - TZ=Etc/UTC
+  #     - DEBUG=true # uncomment to enable debug logs
+  #   #      - BASE_PATH=/maintainerr # uncomment if you're serving maintainerr from a subdirectory
+  #   #      - UI_HOSTNAME=:: # uncomment if you want to listen on IPv6 instead (default 0.0.0.0)
+  #   #      - UI_PORT=6247 # uncomment to change the UI port (default 6246). Useful if you're on a network where the port is already in use
+  #   #      - API_PORT=3002 # uncomment to change the API port (default 3001). Useful if you're on a network where the port is already in use
+  #   ports:
+  #     - 6246:6246
+  #   restart: unless-stopped
+
 # ########################################################################## #
 #                                   VOLUMES                                  #
 # ########################################################################## #
@@ -364,19 +412,19 @@ volumes:
     driver_opts:
       type: nfs
       o: addr=192.168.0.115,rw,nolock,hard,nfsvers=4
-      device: ":/share"  
+      device: ":/share"
   smb_books:
     driver: local
     driver_opts:
       type: nfs
       o: addr=192.168.0.115,rw,nolock,hard,nfsvers=4
-      device: ":/share/books"  
+      device: ":/share/books"
   smb_downloads:
     driver: local
     driver_opts:
       type: nfs
       o: addr=192.168.0.115,rw,nolock,hard,nfsvers=4
-      device: ":/share/downloads" 
+      device: ":/share/downloads"
   smb_incomplete_downloads:
     driver: local
     driver_opts:
